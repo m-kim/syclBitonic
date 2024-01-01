@@ -1,4 +1,7 @@
-# "cubit" - A CUDA Header-Only, In-Place, Non-Power-of-Two cudaBitonic sorter
+# "cubit" - A SYCL Header-Only, In-Place, Non-Power-of-Two cudaBitonic sorter
+
+NOTE: I only converted cubit.h and common.h as a drop in replacement for other code. 
+The tests don't compile and run with this SYCL code.
 
 For some CUDA large-BVH-construction project I recently needed a
 reasonably fast sorter that would be able to sort "in place", without
