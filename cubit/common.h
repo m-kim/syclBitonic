@@ -21,6 +21,8 @@
 #ifndef _USE_MATH_DEFINES
 #  define _USE_MATH_DEFINES
 #endif
+#include <sycl/sycl.hpp>
+
 #include <math.h> // using cmath causes issues under Windows
 
 #include <stdio.h>
@@ -81,9 +83,9 @@
 #endif
 #endif
 
-#if defined(__CUDA_ARCH__)
-# define __owl_device   __device__
-# define __owl_host     __host__
+#if defined(DPCT_COMPATIBILITY_TEMP)
+# define __owl_device   
+# define __owl_host     
 #else
 # define __owl_device   /* ignore */
 # define __owl_host     /* ignore */
@@ -143,9 +145,8 @@
 namespace cubit {
   namespace common {
 
-#ifdef __CUDA_ARCH__
-    using ::min;
-    using ::max;
+#ifdef DPCT_COMPATIBILITY_TEMP
+
     using std::abs;
 #else
     using std::min;
@@ -160,9 +161,9 @@ namespace cubit {
     inline __both__ uint32_t divRoundUp(uint32_t a, uint32_t b) { return (a+b-1)/b; }
     inline __both__ int64_t divRoundUp(int64_t a, int64_t b) { return (a+b-1)/b; }
     inline __both__ uint64_t divRoundUp(uint64_t a, uint64_t b) { return (a+b-1)/b; }
-  
-    using ::sin; // this is the double version
-    using ::cos; // this is the double version
+
+    using sycl::sin; // this is the double version
+    using sycl::cos; // this is the double version
 
     /*! namespace that offers polymorphic overloads of functions like
         sqrt, rsqrt, sin, cos, etc (that vary based on float vs
@@ -171,9 +172,9 @@ namespace cubit {
         - TODO: make sure that cos, sin, abs, etc are also properly
         handled here. */
     namespace polymorphic {
-#ifdef __CUDA_ARCH__
-      inline __both__ float sqrt(const float f)     { return ::sqrtf(f); }
-      inline __both__ double sqrt(const double d)   { return ::sqrt(d); }
+#ifdef DPCT_COMPATIBILITY_TEMP
+      inline __both__ float sqrt(const float f) { return sycl::sqrt((float)f); }
+      inline __both__ double sqrt(const double d) { return sycl::sqrt((double)d); }
 #else
       inline __both__ float sqrt(const float f)     { return ::sqrtf(f); }
       inline __both__ double sqrt(const double d)   { return ::sqrt(d); }
